@@ -1,4 +1,4 @@
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
 
 interface GeneratedQuestion {
   question_text: string;
