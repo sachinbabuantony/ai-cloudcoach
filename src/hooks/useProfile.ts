@@ -21,6 +21,9 @@ export function useProfile() {
   useEffect(() => {
     if (user) {
       loadProfile();
+    } else {
+      setLoading(false);
+      setProfile(null);
     }
   }, [user]);
 
