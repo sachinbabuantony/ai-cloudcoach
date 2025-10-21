@@ -5,18 +5,40 @@ import { AuthForm } from './components/AuthForm';
 import { CertificationSelector } from './components/CertificationSelector';
 import { Dashboard } from './components/Dashboard';
 import { DailySession } from './components/DailySession';
+import { AIQuestionGenerator } from './components/AIQuestionGenerator';
+import { AdminPanel } from './components/AdminPanel';
 import { Loader2 } from 'lucide-react';
 
 function AppContent() {
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading, refreshProfile } = useProfile();
-  const [view, setView] = useState<'dashboard' | 'session'>('dashboard');
+  const [view, setView] = useState<'dashboard' | 'session' | 'ai-generator' | 'admin'>('dashboard');
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === 'ai') {
+      setView('ai-generator');
+    } else if (params.get('admin') === 'manual') {
+      setView('admin');
+    }
+  }, []);
 
   useEffect(() => {
     if (profile) {
-      setView('dashboard');
+      const params = new URLSearchParams(window.location.search);
+      if (!params.get('admin')) {
+        setView('dashboard');
+      }
     }
   }, [profile]);
+
+  if (view === 'ai-generator') {
+    return <AIQuestionGenerator />;
+  }
+
+  if (view === 'admin') {
+    return <AdminPanel />;
+  }
 
   if (authLoading || profileLoading) {
     return (
