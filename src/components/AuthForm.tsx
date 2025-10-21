@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { LogIn, UserPlus, Loader2 } from 'lucide-react';
 
 export function AuthForm() {
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -21,7 +21,11 @@ export function AuthForm() {
         : await signIn(email, password);
 
       if (error) {
-        setError(error.message);
+        if (error.message === 'Invalid login credentials') {
+          setError("Account not found. Please click 'Sign up' to create a new account first.");
+        } else {
+          setError(error.message);
+        }
       }
     } catch (err) {
       setError('An unexpected error occurred');
